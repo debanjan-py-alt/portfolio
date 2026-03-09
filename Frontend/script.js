@@ -99,72 +99,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-/* ── CONTACT FORM — Netlify Forms ────────────────────────────────────────── */
-const contactForm = document.getElementById('contactForm');
-const submitBtn   = document.getElementById('submitBtn');
-const formSuccess = document.getElementById('formSuccess');
+/* ── CONTACT FORM — Netlify Forms (native submit, no JS required) ────────── */
+// Form submits natively via Netlify. No fetch() or API calls needed.
+// Netlify intercepts the POST at the CDN level and handles delivery.
 
-/**
- * Netlify Forms AJAX submission.
- * Posts encoded form data to '/' so Netlify intercepts it at the CDN level.
- * No page redirect — success message is shown inline.
- */
-function encodeFormData(data) {
-  return Object.keys(data)
-    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
-    .join('&');
-}
-
-if (contactForm) {
-  contactForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const btnText     = submitBtn.querySelector('.btn-text');
-    const originalText = btnText.textContent;
-
-    // — Loading state —
-    submitBtn.disabled = true;
-    btnText.textContent = 'Sending…';
-
-    const payload = {
-      'form-name': 'contact',
-      name:        contactForm.name.value.trim(),
-      email:       contactForm.email.value.trim(),
-      subject:     contactForm.subject.value.trim(),
-      message:     contactForm.message.value.trim(),
-    };
-
-    try {
-      const response = await fetch('/', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body:    encodeFormData(payload),
-      });
-
-      if (response.ok) {
-        // ✅ Success — show inline message
-        formSuccess.innerHTML = `
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-          Thank you! Your message has been sent.
-        `;
-        formSuccess.classList.add('show');
-        contactForm.reset();
-        setTimeout(() => formSuccess.classList.remove('show'), 7000);
-      } else {
-        alert('⚠️ Something went wrong. Please try again or email me at hello@debanjandas.design');
-      }
-    } catch (err) {
-      console.error('Contact form error:', err);
-      alert('⚠️ Could not submit the form. Please try again later or email me directly at hello@debanjandas.design');
-    } finally {
-      // — Restore button —
-      submitBtn.disabled = false;
-      btnText.textContent = originalText;
-    }
-  });
-}
 
 
 /* ── SCROLL PROGRESS BAR ─────────────────────────────────────────────────── */
