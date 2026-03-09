@@ -99,26 +99,27 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-/* ── CONTACT FORM — Backend API ───────────────────────────────────────────── */
+/* ── CONTACT FORM — Netlify Forms ────────────────────────────────────────── */
 const contactForm = document.getElementById('contactForm');
 const submitBtn   = document.getElementById('submitBtn');
 const formSuccess = document.getElementById('formSuccess');
 
 /**
- * 🔧 CONFIGURATION
- * Relative URL works automatically in both environments:
- *   Local dev  → http://localhost:5000/api/contact
- *   Production → https://your-app.onrender.com/api/contact
- * No changes needed when deploying!
+ * Netlify Forms AJAX submission.
+ * Posts encoded form data to '/' so Netlify intercepts it at the CDN level.
+ * No page redirect — success message is shown inline.
  */
-const API_URL = '/api/contact';
-
+function encodeFormData(data) {
+  return Object.keys(data)
+    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+    .join('&');
+}
 
 if (contactForm) {
   contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const btnText = submitBtn.querySelector('.btn-text');
+    const btnText     = submitBtn.querySelector('.btn-text');
     const originalText = btnText.textContent;
 
     // — Loading state —
@@ -126,40 +127,37 @@ if (contactForm) {
     btnText.textContent = 'Sending…';
 
     const payload = {
-      name:    contactForm.name.value.trim(),
-      email:   contactForm.email.value.trim(),
-      subject: contactForm.subject.value.trim(),
-      message: contactForm.message.value.trim(),
+      'form-name': 'contact',
+      name:        contactForm.name.value.trim(),
+      email:       contactForm.email.value.trim(),
+      subject:     contactForm.subject.value.trim(),
+      message:     contactForm.message.value.trim(),
     };
 
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch('/', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(payload),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body:    encodeFormData(payload),
       });
 
-      const data = await response.json();
-
-      if (response.ok && data.success) {
-        // ✅ Success
-        formSuccess.querySelector
-          ? (formSuccess.textContent = data.message)
-          : null;
+      if (response.ok) {
+        // ✅ Success — show inline message
+        formSuccess.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          Thank you! Your message has been sent.
+        `;
         formSuccess.classList.add('show');
         contactForm.reset();
-        setTimeout(() => formSuccess.classList.remove('show'), 6000);
+        setTimeout(() => formSuccess.classList.remove('show'), 7000);
       } else {
-        // ❌ API returned validation errors or server error
-        const errorMsg = data.errors
-          ? data.errors.map(e => e.message).join(' ')
-          : (data.message || 'Something went wrong. Please try again.');
-        alert(`⚠️ ${errorMsg}`);
+        alert('⚠️ Something went wrong. Please try again or email me at hello@debanjandas.design');
       }
     } catch (err) {
-      // ❌ Network error (backend offline, CORS, etc.)
       console.error('Contact form error:', err);
-      alert('⚠️ Could not reach the server. Please try again later or email me directly at hello@debanjandas.design');
+      alert('⚠️ Could not submit the form. Please try again later or email me directly at hello@debanjandas.design');
     } finally {
       // — Restore button —
       submitBtn.disabled = false;
