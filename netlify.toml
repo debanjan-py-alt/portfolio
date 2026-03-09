@@ -1,0 +1,4 @@
+[build]
+  publish = "Frontend"
+
+# No build command needed — pure static site
