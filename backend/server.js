@@ -1,4 +1,6 @@
 require('dotenv').config();
+
+const express = require('express');
 const path       = require('path');
 const helmet     = require('helmet');
 const cors       = require('cors');
@@ -6,6 +8,7 @@ const rateLimit  = require('express-rate-limit');
 const connectDB  = require('./config/db');
 const contactRoutes  = require('./routes/contactRoutes');
 const errorHandler   = require('./middleware/errorHandler');
+
 
 // ─── Connect Database ──────────────────────────────────────────────────────
 connectDB();
