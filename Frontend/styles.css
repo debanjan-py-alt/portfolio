@@ -1013,6 +1013,9 @@ img { display: block; max-width: 100%; }
   text-align: center;
   transition: var(--transition);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .process-step:hover {
   border-color: rgba(99,102,241,0.35);
@@ -1460,6 +1463,16 @@ img { display: block; max-width: 100%; }
   .tools-grid        { grid-template-columns: repeat(2, 1fr); }
   .testimonials-grid { grid-template-columns: 1fr; }
   .contact-wrapper   { grid-template-columns: 1fr; }
+
+  /* Process — 2 columns on tablet */
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    overflow-x: visible;
+  }
+  .process-connector { display: none; }
+  .process-step { min-width: unset; }
 }
 
 @media (max-width: 768px) {
@@ -1488,12 +1501,26 @@ img { display: block; max-width: 100%; }
   .stat-divider  { display: none; }
   .stat          { padding: 0; }
 
+  /* Process — single column on mobile */
   .process-steps {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    overflow-x: visible;
+    grid-template-columns: 1fr;
+    gap: 16px;
   }
-  .process-connector { display: none; }
+  .process-step {
+    padding: 32px 28px;
+    border-radius: 20px;
+  }
+  .process-step h3 {
+    font-size: 1.05rem;
+  }
+  .process-step p {
+    font-size: 0.88rem;
+    max-width: 340px;
+    margin: 0 auto;
+  }
+  .step-icon {
+    font-size: 2.2rem;
+  }
 
   .footer-top    { flex-direction: column; align-items: flex-start; }
   .footer-bottom { flex-direction: column; align-items: flex-start; }
@@ -1502,4 +1529,13 @@ img { display: block; max-width: 100%; }
 @media (max-width: 480px) {
   .hero-cta  { flex-direction: column; }
   .btn       { width: 100%; justify-content: center; }
+
+  /* Process — more breathing room on small phones */
+  .process-steps { gap: 14px; }
+  .process-step {
+    padding: 28px 20px;
+    border-radius: 18px;
+  }
+  .process-step h3 { font-size: 1rem; }
+  .process-step p  { font-size: 0.85rem; }
 }
