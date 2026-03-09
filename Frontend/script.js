@@ -112,11 +112,12 @@ progressBar.style.cssText = `
   top: 0;
   left: 0;
   height: 2px;
-  background: linear-gradient(90deg, #6366f1, #a855f7);
+  background: linear-gradient(90deg, #7c3aed, #c026d3, #e879f9);
   z-index: 9999;
   width: 0%;
   transition: width 0.1s linear;
   pointer-events: none;
+  box-shadow: 0 0 10px rgba(192,38,211,0.6);
 `;
 document.body.appendChild(progressBar);
 
@@ -127,99 +128,103 @@ window.addEventListener('scroll', () => {
   progressBar.style.width = pct + '%';
 }, { passive: true });
 
-/* ── PARALLAX ORB MOUSE MOVEMENT ─────────────────────────────────────────── */
-const orbs = document.querySelectorAll('.orb');
+/* ── UNIFIED MOUSE TRACKING (single listener, all DOM writes via rAF) ────── */
+// Store raw coords only — no DOM writes in the event handler.
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
+// Tilt / magnetic state (written by event, consumed by rAF)
+let tiltTarget = null, tiltX = 0, tiltY = 0;
+let magTarget = null, magX = 0, magY = 0;
+
 document.addEventListener('mousemove', (e) => {
-  const x = (e.clientX / window.innerWidth  - 0.5) * 20;
-  const y = (e.clientY / window.innerHeight - 0.5) * 20;
-  orbs.forEach((orb, i) => {
-    const factor = (i + 1) * 0.5;
-    orb.style.transform = `translate(${x * factor}px, ${y * factor}px)`;
-  });
-});
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+}, { passive: true });
 
 /* ── TILT EFFECT ON PROJECT CARDS ────────────────────────────────────────── */
 document.querySelectorAll('.project-card, .tool-card').forEach(card => {
   card.addEventListener('mousemove', (e) => {
     const rect = card.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width  - 0.5) * 12;
-    const y = ((e.clientY - rect.top)  / rect.height - 0.5) * 12;
-    card.style.transform = `translateY(-6px) rotateX(${-y}deg) rotateY(${x}deg)`;
-    card.style.transition = 'transform 0.05s linear';
-  });
+    tiltTarget = card;
+    tiltX = ((e.clientX - rect.left) / rect.width  - 0.5) * 12;
+    tiltY = ((e.clientY - rect.top)  / rect.height - 0.5) * 12;
+  }, { passive: true });
   card.addEventListener('mouseleave', () => {
-    card.style.transform = '';
+    if (tiltTarget === card) tiltTarget = null;
     card.style.transition = 'transform 0.4s cubic-bezier(0.4,0,0.2,1)';
-  });
+    card.style.transform = '';
+  }, { passive: true });
 });
 
-/* ── GLOWING CURSOR TRAIL ─────────────────────────────────────────────────── */
-const cursor = document.createElement('div');
-cursor.style.cssText = `
+/* ── CURSOR (single element, instant snap, no blend mode) ────────────────── */
+// One ring that snaps instantly — no lerp lag, no mix-blend-mode,
+// no per-frame box-shadow repaint.
+const cursorEl = document.createElement('div');
+cursorEl.id = 'cursor-ring';
+cursorEl.style.cssText = `
   pointer-events: none;
   position: fixed;
+  top: 0; left: 0;
+  width: 28px;
+  height: 28px;
+  border: 2px solid rgba(192,38,211,0.8);
+  border-radius: 50%;
+  /* transform is the ONLY property changed in rAF — no layout, no paint */
+  will-change: transform;
+  /* size/opacity transitions are CSS-only; rAF only updates translate */
+  transition: width 0.18s ease, height 0.18s ease,
+              border-color 0.18s ease, opacity 0.25s ease;
   z-index: 9998;
-  width: 8px;
-  height: 8px;
-  background: rgba(99,102,241,0.8);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: width 0.2s, height 0.2s, opacity 0.2s;
-  mix-blend-mode: screen;
-  box-shadow: 0 0 12px rgba(99,102,241,0.9);
+  /* Static glow stays on the element permanently — not animated per-frame */
+  filter: drop-shadow(0 0 6px rgba(192,38,211,0.55));
 `;
-document.body.appendChild(cursor);
+document.body.appendChild(cursorEl);
 
-const cursorRing = document.createElement('div');
-cursorRing.style.cssText = `
-  pointer-events: none;
-  position: fixed;
-  z-index: 9997;
-  width: 36px;
-  height: 36px;
-  border: 1.5px solid rgba(99,102,241,0.4);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: transform 0.15s linear, width 0.25s, height 0.25s, border-color 0.2s;
-`;
-document.body.appendChild(cursorRing);
+/* Center offset so the ring is always centred on the pointer */
+const RING_SIZE = 28;
+const RING_HALF = RING_SIZE / 2;
 
-let cursorX = 0, cursorY = 0;
-let ringX = 0, ringY = 0;
+let spotlightFrame = 0;
 
-document.addEventListener('mousemove', (e) => {
-  cursorX = e.clientX;
-  cursorY = e.clientY;
-  cursor.style.left = cursorX + 'px';
-  cursor.style.top  = cursorY + 'px';
-});
+/* Single rAF render loop — all DOM writes happen here, once per frame */
+function renderLoop() {
+  // Instantly snaps to pointer — no lerp = zero perceived lag
+  cursorEl.style.transform = `translate(${mouseX - RING_HALF}px, ${mouseY - RING_HALF}px)`;
 
-function animateRing() {
-  ringX += (cursorX - ringX) * 0.12;
-  ringY += (cursorY - ringY) * 0.12;
-  cursorRing.style.left = ringX + 'px';
-  cursorRing.style.top  = ringY + 'px';
-  requestAnimationFrame(animateRing);
+  // Spotlight CSS vars — update every 2nd frame to halve repaint cost
+  if (spotlightFrame++ % 2 === 0) {
+    document.body.style.setProperty('--mouse-x', mouseX + 'px');
+    document.body.style.setProperty('--mouse-y', mouseY + 'px');
+  }
+
+  // Flush tilt write inside rAF (avoids sync layout in mousemove)
+  if (tiltTarget) {
+    tiltTarget.style.transition = 'transform 0.05s linear';
+    tiltTarget.style.transform = `translateY(-6px) rotateX(${-tiltY}deg) rotateY(${tiltX}deg)`;
+  }
+
+  // Flush magnetic button write inside rAF
+  if (magTarget) {
+    magTarget.style.transform = `translateY(-3px) translate(${magX}px, ${magY}px)`;
+  }
+
+  requestAnimationFrame(renderLoop);
 }
-animateRing();
+requestAnimationFrame(renderLoop);
 
-// Scale cursor on hoverable elements
+// Expand ring on hoverable elements (CSS class toggle — no inline style writes per frame)
 const hoverables = document.querySelectorAll('a, button, .project-card, .skill-card, .tool-card, .testi-card');
 hoverables.forEach(el => {
   el.addEventListener('mouseenter', () => {
-    cursor.style.width  = '14px';
-    cursor.style.height = '14px';
-    cursorRing.style.width  = '56px';
-    cursorRing.style.height = '56px';
-    cursorRing.style.borderColor = 'rgba(168,85,247,0.6)';
-  });
+    cursorEl.style.width        = '48px';
+    cursorEl.style.height       = '48px';
+    cursorEl.style.borderColor  = 'rgba(232,121,249,0.9)';
+  }, { passive: true });
   el.addEventListener('mouseleave', () => {
-    cursor.style.width  = '8px';
-    cursor.style.height = '8px';
-    cursorRing.style.width  = '36px';
-    cursorRing.style.height = '36px';
-    cursorRing.style.borderColor = 'rgba(99,102,241,0.4)';
-  });
+    cursorEl.style.width        = '28px';
+    cursorEl.style.height       = '28px';
+    cursorEl.style.borderColor  = 'rgba(192,38,211,0.8)';
+  }, { passive: true });
 });
 
 /* ── TYPED HEADLINE EFFECT ────────────────────────────────────────────────── */
@@ -256,18 +261,31 @@ statNums.forEach(num => counterObserver.observe(num));
 /* ── PROCESS STEP HOVER GLOW ─────────────────────────────────────────────── */
 document.querySelectorAll('.process-step').forEach(step => {
   step.addEventListener('mouseenter', () => {
-    step.style.boxShadow = '0 20px 50px rgba(99,102,241,0.2), 0 0 0 1px rgba(99,102,241,0.15)';
+    step.style.boxShadow = '0 20px 50px rgba(124,58,237,0.2), 0 0 0 1px rgba(124,58,237,0.15)';
   });
   step.addEventListener('mouseleave', () => {
     step.style.boxShadow = '';
   });
 });
 
+/* ── MAGNETIC BUTTON EFFECT ─────────────────────────────────────────────── */
+document.querySelectorAll('.btn-primary').forEach(btn => {
+  btn.addEventListener('mousemove', (e) => {
+    const rect = btn.getBoundingClientRect();
+    magTarget = btn;
+    magX = (e.clientX - rect.left - rect.width  / 2) * 0.22;
+    magY = (e.clientY - rect.top  - rect.height / 2) * 0.22;
+  }, { passive: true });
+  btn.addEventListener('mouseleave', () => {
+    if (magTarget === btn) magTarget = null;
+    btn.style.transform = '';
+  }, { passive: true });
+});
+
 /* ── HIDE CURSOR ON MOBILE ───────────────────────────────────────────────── */
 if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-  cursor.style.display     = 'none';
-  cursorRing.style.display = 'none';
+  cursorEl.style.display = 'none';
 }
 
-console.log('%c✦ Debanjan Das Portfolio', 'color:#6366f1;font-size:1.4rem;font-weight:800;');
-console.log('%cBuilt with passion for design.', 'color:#a855f7;font-size:0.9rem;');
+console.log('%c✦ Debanjan Das Portfolio', 'color:#c026d3;font-size:1.4rem;font-weight:800;');
+console.log('%cBuilt with passion for design.', 'color:#e879f9;font-size:0.9rem;');

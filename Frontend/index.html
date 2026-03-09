@@ -7,10 +7,21 @@
   <meta name="description" content="Portfolio of Debanjan Das — UI/UX Designer and Graphic Designer specializing in clean, intuitive, and impactful digital experiences." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+
+  <!-- Hidden SVG defs for skill ring gradients -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#7c3aed"/>
+        <stop offset="60%" stop-color="#c026d3"/>
+        <stop offset="100%" stop-color="#e879f9"/>
+      </linearGradient>
+    </defs>
+  </svg>
 
   <!-- ─── NAVBAR ─────────────────────────────────────────────────────────── -->
   <nav class="navbar" id="navbar">
@@ -69,6 +80,33 @@
       <div class="scroll-line"></div>
     </div>
   </section>
+
+  <!-- ─── MARQUEE TICKER ─────────────────────────────────────────────────── -->
+  <div class="marquee-section" aria-hidden="true">
+    <div class="marquee-track">
+      <span class="marquee-item"><span class="marquee-dot"></span>UI/UX Design</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Brand Identity</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Motion Design</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Web Design</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Design Systems</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>User Research</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Prototyping</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Typography</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Illustration</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Visual Storytelling</span>
+      <!-- Duplicate for seamless loop -->
+      <span class="marquee-item"><span class="marquee-dot"></span>UI/UX Design</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Brand Identity</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Motion Design</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Web Design</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Design Systems</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>User Research</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Prototyping</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Typography</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Illustration</span>
+      <span class="marquee-item"><span class="marquee-dot"></span>Visual Storytelling</span>
+    </div>
+  </div>
 
   <!-- ─── FEATURED PROJECTS ─────────────────────────────────────────────── -->
   <section class="projects" id="work">
@@ -364,88 +402,118 @@
         <p class="section-desc">A versatile design toolkit built for crafting world-class digital products.</p>
       </div>
       <div class="skills-grid">
-        <div class="skill-card reveal" data-delay="0">
-          <div class="skill-icon">
-            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="48" height="48" rx="14" fill="url(#sk1)"/>
-              <path d="M16 24H32M24 16V32" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-              <rect x="12" y="12" width="10" height="10" rx="3" stroke="white" stroke-width="2"/>
-              <rect x="26" y="26" width="10" height="10" rx="3" stroke="white" stroke-width="2"/>
-              <defs><linearGradient id="sk1" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
-            </svg>
+        <div class="skill-card reveal" data-delay="0" style="--level-pct:95">
+          <div class="skill-card-top">
+            <div class="skill-ring-wrap">
+              <svg viewBox="0 0 64 64"><circle class="skill-ring-bg" cx="32" cy="32" r="26"/><circle class="skill-ring-fill" cx="32" cy="32" r="26"/></svg>
+              <div class="skill-ring-pct">95%</div>
+            </div>
+            <div class="skill-icon">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="48" height="48" rx="14" fill="url(#sk1)"/>
+                <path d="M16 24H32M24 16V32" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                <rect x="12" y="12" width="10" height="10" rx="3" stroke="white" stroke-width="2"/>
+                <rect x="26" y="26" width="10" height="10" rx="3" stroke="white" stroke-width="2"/>
+                <defs><linearGradient id="sk1" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#c026d3"/></linearGradient></defs>
+              </svg>
+            </div>
           </div>
           <h3>UI/UX Design</h3>
           <p>Creating beautiful, intuitive interfaces grounded in research and best practices.</p>
-          <div class="skill-level"><div class="skill-bar" style="--level: 95%"></div></div>
         </div>
-        <div class="skill-card reveal" data-delay="100">
-          <div class="skill-icon">
-            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="48" height="48" rx="14" fill="url(#sk2)"/>
-              <rect x="12" y="12" width="10" height="10" rx="2" stroke="white" stroke-width="2"/>
-              <rect x="26" y="12" width="10" height="10" rx="2" stroke="white" stroke-width="2"/>
-              <rect x="12" y="26" width="10" height="10" rx="2" stroke="white" stroke-width="2"/>
-              <rect x="26" y="26" width="10" height="10" rx="2" stroke="white" stroke-width="2"/>
-              <defs><linearGradient id="sk2" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#0ea5e9"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs>
-            </svg>
+        <div class="skill-card reveal" data-delay="100" style="--level-pct:92">
+          <div class="skill-card-top">
+            <div class="skill-ring-wrap">
+              <svg viewBox="0 0 64 64"><circle class="skill-ring-bg" cx="32" cy="32" r="26"/><circle class="skill-ring-fill" cx="32" cy="32" r="26"/></svg>
+              <div class="skill-ring-pct">92%</div>
+            </div>
+            <div class="skill-icon">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="48" height="48" rx="14" fill="url(#sk2)"/>
+                <rect x="12" y="12" width="10" height="10" rx="2" stroke="white" stroke-width="2"/>
+                <rect x="26" y="12" width="10" height="10" rx="2" stroke="white" stroke-width="2"/>
+                <rect x="12" y="26" width="10" height="10" rx="2" stroke="white" stroke-width="2"/>
+                <rect x="26" y="26" width="10" height="10" rx="2" stroke="white" stroke-width="2"/>
+                <defs><linearGradient id="sk2" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#06b6d4"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs>
+              </svg>
+            </div>
           </div>
           <h3>Wireframing</h3>
           <p>Rapid ideation into clear structural blueprints that align stakeholders early.</p>
-          <div class="skill-level"><div class="skill-bar" style="--level: 92%"></div></div>
         </div>
-        <div class="skill-card reveal" data-delay="200">
-          <div class="skill-icon">
-            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="48" height="48" rx="14" fill="url(#sk3)"/>
-              <circle cx="24" cy="24" r="10" stroke="white" stroke-width="2"/>
-              <path d="M24 14V10M24 38V34M14 24H10M38 24H34" stroke="white" stroke-width="2" stroke-linecap="round"/>
-              <circle cx="24" cy="24" r="3" fill="white"/>
-              <defs><linearGradient id="sk3" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#06b6d4"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient></defs>
-            </svg>
+        <div class="skill-card reveal" data-delay="200" style="--level-pct:90">
+          <div class="skill-card-top">
+            <div class="skill-ring-wrap">
+              <svg viewBox="0 0 64 64"><circle class="skill-ring-bg" cx="32" cy="32" r="26"/><circle class="skill-ring-fill" cx="32" cy="32" r="26"/></svg>
+              <div class="skill-ring-pct">90%</div>
+            </div>
+            <div class="skill-icon">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="48" height="48" rx="14" fill="url(#sk3)"/>
+                <circle cx="24" cy="24" r="10" stroke="white" stroke-width="2"/>
+                <path d="M24 14V10M24 38V34M14 24H10M38 24H34" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="24" cy="24" r="3" fill="white"/>
+                <defs><linearGradient id="sk3" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#06b6d4"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs>
+              </svg>
+            </div>
           </div>
           <h3>Prototyping</h3>
           <p>Interactive prototypes that validate design decisions before development begins.</p>
-          <div class="skill-level"><div class="skill-bar" style="--level: 90%"></div></div>
         </div>
-        <div class="skill-card reveal" data-delay="0">
-          <div class="skill-icon">
-            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="48" height="48" rx="14" fill="url(#sk4)"/>
-              <path d="M12 36L24 12L36 36" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M16 28H32" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-              <defs><linearGradient id="sk4" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#f59e0b"/><stop offset="1" stop-color="#ef4444"/></linearGradient></defs>
-            </svg>
+        <div class="skill-card reveal" data-delay="0" style="--level-pct:93">
+          <div class="skill-card-top">
+            <div class="skill-ring-wrap">
+              <svg viewBox="0 0 64 64"><circle class="skill-ring-bg" cx="32" cy="32" r="26"/><circle class="skill-ring-fill" cx="32" cy="32" r="26"/></svg>
+              <div class="skill-ring-pct">93%</div>
+            </div>
+            <div class="skill-icon">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="48" height="48" rx="14" fill="url(#sk4)"/>
+                <path d="M12 36L24 12L36 36" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 28H32" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                <defs><linearGradient id="sk4" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#f59e0b"/><stop offset="1" stop-color="#e879f9"/></linearGradient></defs>
+              </svg>
+            </div>
           </div>
           <h3>Graphic Design</h3>
           <p>Bold visual storytelling across print, digital, and motion design mediums.</p>
-          <div class="skill-level"><div class="skill-bar" style="--level: 93%"></div></div>
         </div>
-        <div class="skill-card reveal" data-delay="100">
-          <div class="skill-icon">
-            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="48" height="48" rx="14" fill="url(#sk5)"/>
-              <rect x="10" y="14" width="28" height="16" rx="3" stroke="white" stroke-width="2"/>
-              <path d="M16 30V34M32 30V34M13 34H35" stroke="white" stroke-width="2" stroke-linecap="round"/>
-              <path d="M18 20H30M21 24H27" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-              <defs><linearGradient id="sk5" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#10b981"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient></defs>
-            </svg>
+        <div class="skill-card reveal" data-delay="100" style="--level-pct:88">
+          <div class="skill-card-top">
+            <div class="skill-ring-wrap">
+              <svg viewBox="0 0 64 64"><circle class="skill-ring-bg" cx="32" cy="32" r="26"/><circle class="skill-ring-fill" cx="32" cy="32" r="26"/></svg>
+              <div class="skill-ring-pct">88%</div>
+            </div>
+            <div class="skill-icon">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="48" height="48" rx="14" fill="url(#sk5)"/>
+                <rect x="10" y="14" width="28" height="16" rx="3" stroke="white" stroke-width="2"/>
+                <path d="M16 30V34M32 30V34M13 34H35" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <path d="M18 20H30M21 24H27" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                <defs><linearGradient id="sk5" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#10b981"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>
+              </svg>
+            </div>
           </div>
           <h3>Responsive Web Design</h3>
           <p>Fluid, pixel-perfect layouts that feel native on any screen size or device.</p>
-          <div class="skill-level"><div class="skill-bar" style="--level: 88%"></div></div>
         </div>
-        <div class="skill-card reveal" data-delay="200">
-          <div class="skill-icon">
-            <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="48" height="48" rx="14" fill="url(#sk6)"/>
-              <circle cx="24" cy="20" r="7" stroke="white" stroke-width="2"/>
-              <path d="M12 38c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="white" stroke-width="2" stroke-linecap="round"/>
-              <defs><linearGradient id="sk6" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#ec4899"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs>
-            </svg>
+        <div class="skill-card reveal" data-delay="200" style="--level-pct:87">
+          <div class="skill-card-top">
+            <div class="skill-ring-wrap">
+              <svg viewBox="0 0 64 64"><circle class="skill-ring-bg" cx="32" cy="32" r="26"/><circle class="skill-ring-fill" cx="32" cy="32" r="26"/></svg>
+              <div class="skill-ring-pct">87%</div>
+            </div>
+            <div class="skill-icon">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="48" height="48" rx="14" fill="url(#sk6)"/>
+                <circle cx="24" cy="20" r="7" stroke="white" stroke-width="2"/>
+                <path d="M12 38c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <defs><linearGradient id="sk6" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#ec4899"/><stop offset="1" stop-color="#c026d3"/></linearGradient></defs>
+              </svg>
+            </div>
           </div>
           <h3>User Research</h3>
           <p>Uncovering deep user insights through interviews, usability tests, and data analysis.</p>
-          <div class="skill-level"><div class="skill-bar" style="--level: 87%"></div></div>
         </div>
       </div>
     </div>
